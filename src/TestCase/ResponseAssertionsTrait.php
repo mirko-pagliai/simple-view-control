@@ -6,7 +6,7 @@ namespace SimpleVC\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Provides assertion methods for testing HTTP responses.
+ * Provides a set of assertion methods to validate properties and behavior of an HTTP response in tests.
  *
  * This trait can be used in any test class that works with Symfony Response objects. The test class must have a
  *  `$response` property of type `Response|null`.
