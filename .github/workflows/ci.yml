@@ -19,7 +19,6 @@ jobs:
         include:
           - php-version: '8.4'
             dependencies: 'lowest'
-        include:
           - php-version: '8.5'
             dependencies: 'lowest'
 
