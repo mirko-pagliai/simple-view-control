@@ -13,6 +13,7 @@ if (!defined('ROOT')) {
 
 const DEBUG = true;
 const TEST_APP = ROOT . DS . 'tests' . DS . 'test_app';
+const CONFIG = TEST_APP . DS . 'config';
 const TEMPLATES = TEST_APP . DS . 'templates';
 
 // Define temporary directory
