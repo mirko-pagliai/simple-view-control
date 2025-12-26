@@ -149,6 +149,26 @@ class ViewTest extends TestCase
     }
 
     /**
+     * @link \SimpleVC\View\View::renderFile()
+     */
+    #[Test]
+    public function testRenderFileOnError(): void
+    {
+        $view = $this->getMockBuilder(View::class)
+            ->onlyMethods(['includeTemplateFile'])
+            ->getMock();
+
+        $view
+            ->expects($this->once())
+            ->method('includeTemplateFile')
+            ->with(TEMPLATES . '/example.php', [])
+            ->willReturn(false);
+
+        $this->expectExceptionMessage('Template file `' . TEMPLATES . '/example.php` returned invalid output.');
+        $view->render('example.php');
+    }
+
+    /**
      * @link \SimpleVC\View\View::render()
      */
     #[Test]

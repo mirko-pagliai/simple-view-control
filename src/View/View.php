@@ -93,28 +93,45 @@ class View
     }
 
     /**
-     * Renders a template file with the provided data.
+     * Internal method a PHP template file and returns its output as a string.
      *
-     * @param string $file The name of the template file to render.
-     * @param array $data An associative array of data to be extracted and made available within the template.
-     * @return string The rendered content of the template file.
-     * @throws \InvalidArgumentException If the specified template file does not exist.
-     * @throws \RuntimeException If the template file output is not a valid string.
+     * This method extracts the provided data array into variables for use within the template file, buffers the
+     *  template's output, and returns the buffered content.
+     *
+     * If the file cannot be included, it returns false.
+     *
+     * @param string $filePath The path to the template file to include.
+     * @param array $data An associative array of data to be extracted as variables within the template.
+     * @return string|false The output of the template file as a string, or false on failure.
+     *
+     * @internal This method is used internally by `renderFile()` to render a template file.
      */
-    protected function renderFile(string $file, array $data): string
+    protected function includeTemplateFile(string $filePath, array $data): string|false
     {
-        $filePath = $this->templatePath . '/' . $file;
-
-        if (!file_exists($filePath)) {
-            throw new InvalidArgumentException("Template file `{$filePath}` not found.");
-        }
-
         extract($data, EXTR_SKIP);
 
         ob_start();
         include $filePath;
-        $result = ob_get_clean();
+        return ob_get_clean();
+    }
 
+    /**
+     * Renders a template file with the given data.
+     *
+     * @param string $file The name of the template file to render.
+     * @param array $data An associative array of data to be used within the template.
+     * @return string The rendered output of the template.
+     * @throws \InvalidArgumentException If the specified template file does not exist.
+     * @throws \RuntimeException If the template file returns invalid output, that is not a string.
+     */
+    protected function renderFile(string $file, array $data): string
+    {
+        $filePath = $this->templatePath . '/' . $file;
+        if (!file_exists($filePath)) {
+            throw new InvalidArgumentException("Template file `{$filePath}` not found.");
+        }
+
+        $result = $this->includeTemplateFile($filePath, $data);
         if (!is_string($result)) {
             throw new RuntimeException("Template file `{$filePath}` returned invalid output.");
         }
@@ -122,6 +139,16 @@ class View
         return $result;
     }
 
+    /**
+     * Renders a template and optionally wraps it in a layout.
+     *
+     * This method renders the specified template file by using the associated data. If no template is specified, it
+     *  will attempt to auto-detect the template based on the incoming request. If a layout is defined, the rendered
+     *  content of the template will be embedded into the layout before being returned.
+     *
+     * @param string|null $template The path to the template file to render. If null, the template is auto-detected.
+     * @return string The fully rendered output, which may include the layout if set.
+     */
     public function render(?string $template = null): string
     {
         // If no template specified, auto-detect from request
