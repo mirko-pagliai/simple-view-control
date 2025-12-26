@@ -92,6 +92,35 @@ class View
         return $this;
     }
 
+    /**
+     * Renders a template file with the given data and returns the result as a string.
+     *
+     * @param string $file The name of the template file to render.
+     * @param array<string, mixed> $data An associative array of data to be extracted and made available within the template file.
+     * @return string The rendered content of the template file.
+     * @throws \InvalidArgumentException If the template file does not exist, or if the output from the template file is invalid.
+     */
+    protected function renderFile(string $file, array $data): string
+    {
+        $filePath = $this->templatePath . '/' . $file;
+
+        if (!file_exists($filePath)) {
+            throw new InvalidArgumentException("Template file `{$filePath}` not found.");
+        }
+
+        extract($data, EXTR_SKIP);
+
+        ob_start();
+        include $filePath;
+        $result = ob_get_clean();
+
+        if (!is_string($result)) {
+            throw new InvalidArgumentException("Template file returned invalid output: `{$filePath}`.");
+        }
+
+        return $result;
+    }
+
     public function render(?string $template = null): string
     {
         // If no template specified, auto-detect from request
@@ -164,34 +193,5 @@ class View
         $result = preg_replace('/([A-Z]+)([A-Z][a-z])/', '$1_$2', $result) ?: '';
 
         return strtolower($result);
-    }
-
-    /**
-     * Renders a template file with the given data and returns the result as a string.
-     *
-     * @param string $file The name of the template file to render.
-     * @param array<string, mixed> $data An associative array of data to be extracted and made available within the template file.
-     * @return string The rendered content of the template file.
-     * @throws \InvalidArgumentException If the template file does not exist, or if the output from the template file is invalid.
-     */
-    protected function renderFile(string $file, array $data): string
-    {
-        $filePath = $this->templatePath . '/' . $file;
-
-        if (!file_exists($filePath)) {
-            throw new InvalidArgumentException("Template file not found: `{$filePath}`.");
-        }
-
-        extract($data, EXTR_SKIP);
-
-        ob_start();
-        include $filePath;
-        $result = ob_get_clean();
-
-        if (!is_string($result)) {
-            throw new InvalidArgumentException("Template file returned invalid output: `{$filePath}`.");
-        }
-
-        return $result;
     }
 }

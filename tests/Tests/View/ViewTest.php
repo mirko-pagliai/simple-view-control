@@ -115,40 +115,78 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @link \SimpleVC\View\View::autoDetectTemplate()
+     * @link \SimpleVC\View\View::renderFile()
      */
     #[Test]
-    public function testAutoDetectTemplateWithoutRequest(): void
+    public function testRenderFile(): void
     {
         $view = new class extends View {
-            public function autoDetectTemplate(): string
+            public function renderFile(string $file, array $data): string
             {
-                return parent::autoDetectTemplate();
+                return parent::renderFile($file, $data);
             }
         };
 
-        $this->expectExceptionMessage('`$this->request` not set. Call `setRequest()` before `render()`.');
-        $view->autoDetectTemplate();
+        $result = $view->renderFile('example.php', ['content' => 'test']);
+        $this->assertSame('test', trim($result));
     }
 
     /**
-     * @link \SimpleVC\View\View::autoDetectTemplate()
+     * @link \SimpleVC\View\View::renderFile()
      */
     #[Test]
-    public function testAutoDetectTemplateWithoutControllerAttribute(): void
+    public function testRenderFileNoExistingFile(): void
     {
         $view = new class extends View {
-            public function autoDetectTemplate(): string
+            public function renderFile(string $file, array $data): string
             {
-                return parent::autoDetectTemplate();
+                return parent::renderFile($file, $data);
             }
         };
 
-        $request = Request::create('/test');
-        $view->setRequest($request);
+        $this->expectExceptionMessage('Template file `' . TEMPLATES . '/noExistingFile.php` not found.');
+        $view->renderFile('noExistingFile.php', []);
+    }
 
-        $this->expectExceptionMessage('`_controller` attribute not found in `$this->request`.');
-        $view->autoDetectTemplate();
+    /**
+     * @link \SimpleVC\View\View::render()
+     */
+    #[Test]
+    public function testRender(): void
+    {
+        $view = new View();
+        $view->set(['content' => 'test']);
+
+        $expected = '<html lang="en"><body>test</body></html>';
+        $result = $view->render('example.php');
+        $this->assertSame($expected, trim($result));
+
+        $view->setLayout(null);
+
+        $result = $view->render('example.php');
+        $this->assertSame('test', $result);
+    }
+
+    /**
+     * @link \SimpleVC\View\View::render()
+     */
+    #[Test]
+    public function testRenderAutoDetectTemplate(): void
+    {
+        $view = $this->getMockBuilder(View::class)
+            ->setConstructorArgs([null, null])
+            ->onlyMethods(['autoDetectTemplate'])
+            ->getMock();
+
+        $view
+            ->expects($this->once())
+            ->method('autoDetectTemplate')
+            ->willReturn('example.php');
+
+        $view->set(['content' => 'test']);
+
+        $result = $view->render();
+        $this->assertSame('test', $result);
     }
 
     /**
@@ -238,6 +276,43 @@ class ViewTest extends TestCase
 
         $result = $view->autoDetectTemplate();
         $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @link \SimpleVC\View\View::autoDetectTemplate()
+     */
+    #[Test]
+    public function testAutoDetectTemplateWithoutRequest(): void
+    {
+        $view = new class extends View {
+            public function autoDetectTemplate(): string
+            {
+                return parent::autoDetectTemplate();
+            }
+        };
+
+        $this->expectExceptionMessage('`$this->request` not set. Call `setRequest()` before `render()`.');
+        $view->autoDetectTemplate();
+    }
+
+    /**
+     * @link \SimpleVC\View\View::autoDetectTemplate()
+     */
+    #[Test]
+    public function testAutoDetectTemplateWithoutControllerAttribute(): void
+    {
+        $view = new class extends View {
+            public function autoDetectTemplate(): string
+            {
+                return parent::autoDetectTemplate();
+            }
+        };
+
+        $request = Request::create('/test');
+        $view->setRequest($request);
+
+        $this->expectExceptionMessage('`_controller` attribute not found in `$this->request`.');
+        $view->autoDetectTemplate();
     }
 
     #[Test]
