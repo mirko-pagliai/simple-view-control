@@ -122,14 +122,19 @@ trait ResponseAssertionsTrait
     /**
      * Asserts that the response content is not empty.
      *
-     * Ensures that a response exists and contains data, validating that the output is not blank.
+     * Useful for ensuring that the response contains data and is not blank or null, which can be important for
+     * verifying the presence of expected output in test cases.
      *
+     * @param string|null $message Custom failure message for the assertion
      * @return void
      */
-    protected function assertResponseIsNotEmpty(): void
+    protected function assertResponseIsNotEmpty(?string $message = null): void
     {
         $this->assertResponseExists();
-        $this->assertNotEmpty($this->response->getContent(), 'Failed asserting that response is not empty.');
+        $this->assertNotEmpty(
+            $this->response->getContent(),
+            $message ?? 'Failed asserting that response is not empty.',
+        );
     }
 
     /**
@@ -143,6 +148,7 @@ trait ResponseAssertionsTrait
     protected function assertResponseContains(string $needle): void
     {
         $this->assertResponseExists();
+        $this->assertResponseIsNotEmpty("Failed asserting that response contains \"{$needle}\", because the response is empty.");
         $this->assertStringContainsString(
             $needle,
             $this->response->getContent(),
@@ -161,6 +167,7 @@ trait ResponseAssertionsTrait
     protected function assertResponseNotContains(string $needle): void
     {
         $this->assertResponseExists();
+        $this->assertResponseIsNotEmpty("Failed asserting that response does not contain \"{$needle}\", because the response is empty.");
         $this->assertStringNotContainsString(
             $needle,
             $this->response->getContent(),

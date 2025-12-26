@@ -201,6 +201,20 @@ class ResponseAssertionsTraitTest extends TestCase
     }
 
     /**
+     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseContains()
+     */
+    #[Test]
+    public function testAssertResponseContainsWithEmptyResponse(): void
+    {
+        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
+        $testCase->setResponse(new Response());
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage('Failed asserting that response contains "my content", because the response is empty.');
+        $testCase->assertResponseContains('my content');
+    }
+
+    /**
      * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseNotContains()
      */
     #[Test]
@@ -214,6 +228,20 @@ class ResponseAssertionsTraitTest extends TestCase
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response does not contain "my content".');
+        $testCase->assertResponseNotContains('my content');
+    }
+
+    /**
+     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseNotContains()
+     */
+    #[Test]
+    public function testAssertResponseNotContainsWithEmptyResponse(): void
+    {
+        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
+        $testCase->setResponse(new Response());
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage('Failed asserting that response does not contain "my content", because the response is empty.');
         $testCase->assertResponseNotContains('my content');
     }
 
