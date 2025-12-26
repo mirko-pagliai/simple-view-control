@@ -6,6 +6,7 @@
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
         cacheDirectory=".phpunit.cache"
 >
+
     <testsuites>
         <testsuite name="simple-view-control Test Suite">
             <directory>tests/Tests</directory>
@@ -15,7 +16,7 @@
     <!-- configure code coverage -->
     <source>
         <include>
-            <directory suffix=".php">./src/</directory>
+            <directory>./src/</directory>
         </include>
     </source>
 </phpunit>
