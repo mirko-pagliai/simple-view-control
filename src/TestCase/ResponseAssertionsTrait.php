@@ -152,7 +152,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseIsNotEmpty("Failed asserting that response contains \"{$needle}\", because the response is empty.");
         $this->assertStringContainsString(
             $needle,
-            $this->response->getContent(),
+            $this->response->getContent() ?: '',
             "Failed asserting that response contains \"{$needle}\".",
         );
     }
@@ -171,7 +171,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseIsNotEmpty("Failed asserting that response does not contain \"{$needle}\", because the response is empty.");
         $this->assertStringNotContainsString(
             $needle,
-            $this->response->getContent(),
+            $this->response->getContent() ?: '',
             "Failed asserting that response does not contain \"{$needle}\".",
         );
     }
@@ -190,7 +190,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseExists();
         $this->assertMatchesRegularExpression(
             $pattern,
-            $this->response->getContent(),
+            $this->response->getContent() ?: '',
             "Failed asserting that response matches pattern \"{$pattern}\".",
         );
     }

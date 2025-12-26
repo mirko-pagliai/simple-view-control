@@ -5,3 +5,9 @@ parameters:
         - tests
 
     treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        -
+            message: '#^Cannot (call method \w+\(\)|access property \$\w+) on Symfony\\Component\\HttpFoundation\\Response\|null\.$#'
+            paths:
+                - src/TestCase/ResponseAssertionsTrait.php
