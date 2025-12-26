@@ -101,7 +101,7 @@ class View
      * If the file cannot be included, it returns false.
      *
      * @param string $filePath The path to the template file to include.
-     * @param array $data An associative array of data to be extracted as variables within the template.
+     * @param array<string, mixed> $data An associative array of data to be extracted as variables within the template.
      * @return string|false The output of the template file as a string, or false on failure.
      *
      * @internal This method is used internally by `renderFile()` to render a template file.
@@ -119,7 +119,7 @@ class View
      * Renders a template file with the given data.
      *
      * @param string $file The name of the template file to render.
-     * @param array $data An associative array of data to be used within the template.
+     * @param array<string, mixed> $data An associative array of data to be used within the template.
      * @return string The rendered output of the template.
      * @throws \InvalidArgumentException If the specified template file does not exist.
      * @throws \RuntimeException If the template file returns invalid output, that is not a string.
