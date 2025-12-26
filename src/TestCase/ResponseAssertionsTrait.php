@@ -51,7 +51,8 @@ trait ResponseAssertionsTrait
     {
         $this->assertResponseExists();
         $this->assertSame(
-            $expected, $this->response->getStatusCode(),
+            $expected,
+            $this->response->getStatusCode(),
             $message ?? "Failed asserting that response status code is {$expected}.",
         );
     }
