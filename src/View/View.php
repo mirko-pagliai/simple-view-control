@@ -93,12 +93,13 @@ class View
     }
 
     /**
-     * Renders a template file with the given data and returns the result as a string.
+     * Renders a template file with the provided data.
      *
      * @param string $file The name of the template file to render.
-     * @param array<string, mixed> $data An associative array of data to be extracted and made available within the template file.
+     * @param array $data An associative array of data to be extracted and made available within the template.
      * @return string The rendered content of the template file.
-     * @throws \InvalidArgumentException If the template file does not exist, or if the output from the template file is invalid.
+     * @throws \InvalidArgumentException If the specified template file does not exist.
+     * @throws \RuntimeException If the template file output is not a valid string.
      */
     protected function renderFile(string $file, array $data): string
     {
@@ -115,7 +116,7 @@ class View
         $result = ob_get_clean();
 
         if (!is_string($result)) {
-            throw new InvalidArgumentException("Template file returned invalid output: `{$filePath}`.");
+            throw new RuntimeException("Template file `{$filePath}` returned invalid output.");
         }
 
         return $result;

@@ -135,7 +135,7 @@ class ViewTest extends TestCase
      * @link \SimpleVC\View\View::renderFile()
      */
     #[Test]
-    public function testRenderFileNoExistingFile(): void
+    public function testRenderFileWithNoExistingFile(): void
     {
         $view = new class extends View {
             public function renderFile(string $file, array $data): string
