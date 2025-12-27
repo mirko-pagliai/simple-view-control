@@ -1,9 +1,0 @@
-<?php
-declare(strict_types=1);
-
-namespace TestApp\TestCase;
-
-class PagesController
-{
-
-}
