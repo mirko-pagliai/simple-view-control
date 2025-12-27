@@ -22,7 +22,7 @@ trait ResponseAssertionsTrait
      *
      * @var \Symfony\Component\HttpFoundation\Response|null
      */
-    protected ?Response $response = null;
+    protected ?Response $_response = null;
 
     /**
      * Asserts that a response has been set.
@@ -34,7 +34,7 @@ trait ResponseAssertionsTrait
      */
     public function assertResponseExists(): void
     {
-        $this->assertNotNull($this->response, '`$this->response` property has not been set.');
+        $this->assertNotNull($this->_response, '`$this->response` property has not been set.');
     }
 
     /**
@@ -52,7 +52,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseExists();
         $this->assertSame(
             $expected,
-            $this->response->getStatusCode(),
+            $this->_response->getStatusCode(),
             $message ?? "Failed asserting that response status code is {$expected}.",
         );
     }
@@ -65,7 +65,7 @@ trait ResponseAssertionsTrait
     public function assertResponseIsSuccessful(): void
     {
         $this->assertResponseExists();
-        $this->assertTrue($this->response->isSuccessful(), 'Failed asserting that response is successful.');
+        $this->assertTrue($this->_response->isSuccessful(), 'Failed asserting that response is successful.');
     }
 
     /**
@@ -100,7 +100,7 @@ trait ResponseAssertionsTrait
     public function assertResponseIsRedirect(?string $expectedUrl = null): void
     {
         $this->assertResponseExists();
-        $this->assertTrue($this->response->isRedirect(), 'Failed asserting that response is a redirect.');
+        $this->assertTrue($this->_response->isRedirect(), 'Failed asserting that response is a redirect.');
 
         if ($expectedUrl !== null) {
             $this->assertResponseHeader('Location', $expectedUrl);
@@ -117,7 +117,7 @@ trait ResponseAssertionsTrait
     public function assertResponseIsEmpty(): void
     {
         $this->assertResponseExists();
-        $this->assertEmpty($this->response->getContent(), 'Failed asserting that response is empty.');
+        $this->assertEmpty($this->_response->getContent(), 'Failed asserting that response is empty.');
     }
 
     /**
@@ -133,7 +133,7 @@ trait ResponseAssertionsTrait
     {
         $this->assertResponseExists();
         $this->assertNotEmpty(
-            $this->response->getContent(),
+            $this->_response->getContent(),
             $message ?? 'Failed asserting that response is not empty.',
         );
     }
@@ -152,7 +152,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseIsNotEmpty("Failed asserting that response contains \"{$needle}\", because the response is empty.");
         $this->assertStringContainsString(
             $needle,
-            $this->response->getContent() ?: '',
+            $this->_response->getContent() ?: '',
             "Failed asserting that response contains \"{$needle}\".",
         );
     }
@@ -171,7 +171,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseIsNotEmpty("Failed asserting that response does not contain \"{$needle}\", because the response is empty.");
         $this->assertStringNotContainsString(
             $needle,
-            $this->response->getContent() ?: '',
+            $this->_response->getContent() ?: '',
             "Failed asserting that response does not contain \"{$needle}\".",
         );
     }
@@ -190,7 +190,7 @@ trait ResponseAssertionsTrait
         $this->assertResponseExists();
         $this->assertMatchesRegularExpression(
             $pattern,
-            $this->response->getContent() ?: '',
+            $this->_response->getContent() ?: '',
             "Failed asserting that response matches pattern \"{$pattern}\".",
         );
     }
@@ -205,6 +205,6 @@ trait ResponseAssertionsTrait
     public function assertResponseHeader(string $header, string $expected): void
     {
         $this->assertResponseExists();
-        $this->assertSame($expected, $this->response->headers->get($header), 'Failed asserting that response header "'.$header.'" has value "'.$expected.'".');
+        $this->assertSame($expected, $this->_response->headers->get($header), 'Failed asserting that response header "'.$header.'" has value "'.$expected.'".');
     }
 }

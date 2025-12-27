@@ -156,6 +156,6 @@ abstract class ControllerTestCase extends TestCase
         $controller->$action();
 
         // Render view and capture Response
-        $this->response = $controller->render();
+        $this->_response = $controller->render();
     }
 }

@@ -9,28 +9,38 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use SimpleVC\TestCase\ResponseAssertionsTrait;
 use Symfony\Component\HttpFoundation\Response;
-use TestApp\TestCase\TestCaseWithResponseAssertionsTrait;
 
 #[CoversTrait(ResponseAssertionsTrait::class)]
 class ResponseAssertionsTraitTest extends TestCase
 {
+    use ResponseAssertionsTrait;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->_response = new Response(
+            'This is the content of the Response',
+            200,
+            ['Content-Type'=> 'text/html'],
+        );
+    }
+
     /**
      * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseExists()
      */
     #[Test]
     public function testAssertResponseExists(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response())
-            ->assertResponseExists();
+        $this->assertResponseExists();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('`$this->response` property has not been set.');
-        $testCase
-            ->setResponse(null)
-            ->assertResponseExists();
+        $this->_response = null;
+        $this->assertResponseExists();
     }
 
     /**
@@ -39,15 +49,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseStatusCode(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 200))
-            ->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(200);
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response status code is 404.');
-        $testCase->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(404);
     }
 
     /**
@@ -56,17 +62,12 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseIsSuccessful(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 200))
-            ->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is successful.');
-        $testCase
-            ->setResponse(new Response('', 404))
-            ->assertResponseIsSuccessful();
+        $this->_response = new Response('', 404);
+        $this->assertResponseIsSuccessful();
     }
 
     /**
@@ -75,17 +76,13 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseError(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 404))
-            ->assertResponseError();
+        $this->_response = new Response('', 404);
+        $this->assertResponseError();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is not found.');
-        $testCase
-            ->setResponse(new Response('', 200))
-            ->assertResponseError();
+        $this->_response = new Response('', 200);
+        $this->assertResponseError();
     }
 
     /**
@@ -94,17 +91,13 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseFailure(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 500))
-            ->assertResponseFailure();
+        $this->_response = new Response('', 500);
+        $this->assertResponseFailure();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is a server error.');
-        $testCase
-            ->setResponse(new Response('', 200))
-            ->assertResponseFailure();
+        $this->_response = new Response('', 200);
+        $this->assertResponseFailure();
     }
 
     /**
@@ -113,17 +106,13 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseIsRedirect(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 302))
-            ->assertResponseIsRedirect();
+        $this->_response = new Response('', 302);
+        $this->assertResponseIsRedirect();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is a redirect.');
-        $testCase
-            ->setResponse(new Response('', 200))
-            ->assertResponseIsRedirect();
+        $this->_response = new Response('', 200);
+        $this->assertResponseIsRedirect();
     }
 
     /**
@@ -132,17 +121,13 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseIsRedirectWithExpectedUrl(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 302, ['Location' => '/my/url']))
-            ->assertResponseIsRedirect('/my/url');
+        $this->_response = new Response('', 302, ['Location' => '/my/url']);
+        $this->assertResponseIsRedirect('/my/url');
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response header "Location" has value "/my/url".');
-        $testCase
-            ->setResponse(new Response('', 302, ['Location' => '/this/is/not/my/url']))
-            ->assertResponseIsRedirect('/my/url');
+        $this->_response = new Response('', 302, ['Location' => '/this/is/not/my/url']);
+        $this->assertResponseIsRedirect('/my/url');
     }
 
     /**
@@ -151,17 +136,13 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseIsEmpty(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response())
-            ->assertResponseIsEmpty();
+        $this->_response = new Response();
+        $this->assertResponseIsEmpty();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is empty.');
-        $testCase
-            ->setResponse(new Response('this response is not empty'))
-            ->assertResponseIsEmpty();
+        $this->_response = new Response('this response is not empty');
+        $this->assertResponseIsEmpty();
     }
 
     /**
@@ -170,17 +151,12 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseIsNotEmpty(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('this response is not empty'))
-            ->assertResponseIsNotEmpty();
+        $this->assertResponseIsNotEmpty();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is not empty.');
-        $testCase
-            ->setResponse(new Response())
-            ->assertResponseIsNotEmpty();
+        $this->_response = new Response();
+        $this->assertResponseIsNotEmpty();
     }
 
     /**
@@ -189,15 +165,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseContains(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('my content'))
-            ->assertResponseContains('my content');
+        $this->assertResponseContains('content of');
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response contains "not this".');
-        $testCase->assertResponseContains('not this');
+        $this->assertResponseContains('not this');
     }
 
     /**
@@ -206,12 +178,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseContainsWithEmptyResponse(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-        $testCase->setResponse(new Response());
+        $this->_response = new Response();
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessage('Failed asserting that response contains "my content", because the response is empty.');
-        $testCase->assertResponseContains('my content');
+        $this->expectExceptionMessage('Failed asserting that response contains "content of", because the response is empty.');
+        $this->assertResponseContains('content of');
     }
 
     /**
@@ -220,15 +191,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseNotContains(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('my content'))
-            ->assertResponseNotContains('not this');
+        $this->assertResponseNotContains('not this');
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessage('Failed asserting that response does not contain "my content".');
-        $testCase->assertResponseNotContains('my content');
+        $this->expectExceptionMessage('Failed asserting that response does not contain "content of".');
+        $this->assertResponseNotContains('content of');
     }
 
     /**
@@ -237,12 +204,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseNotContainsWithEmptyResponse(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-        $testCase->setResponse(new Response());
+        $this->_response = new Response();
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessage('Failed asserting that response does not contain "my content", because the response is empty.');
-        $testCase->assertResponseNotContains('my content');
+        $this->expectExceptionMessage('Failed asserting that response does not contain "content of", because the response is empty.');
+        $this->assertResponseNotContains('content of');
     }
 
     /**
@@ -251,15 +217,11 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseMatchesRegex(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('my content'))
-            ->assertResponseMatchesRegex('/my.*/');
+        $this->assertResponseMatchesRegex('/^This(\s)?is/');
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response matches pattern "/\d+/".');
-        $testCase->assertResponseMatchesRegex('/\d+/');
+        $this->assertResponseMatchesRegex('/\d+/');
     }
 
     /**
@@ -268,14 +230,10 @@ class ResponseAssertionsTraitTest extends TestCase
     #[Test]
     public function testAssertResponseHeader(): void
     {
-        $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
-
-        $testCase
-            ->setResponse(new Response('', 200, ['Content-Type'=> 'text/html']))
-            ->assertResponseHeader('Content-Type', 'text/html');
+        $this->assertResponseHeader('Content-Type', 'text/html');
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response header "Content-Type" has value "application/json".');
-        $testCase->assertResponseHeader('Content-Type', 'application/json');
+        $this->assertResponseHeader('Content-Type', 'application/json');
     }
 }
