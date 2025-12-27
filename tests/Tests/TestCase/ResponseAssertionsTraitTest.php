@@ -70,41 +70,41 @@ class ResponseAssertionsTraitTest extends TestCase
     }
 
     /**
-     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseIsNotFound()
+     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseError()
      */
     #[Test]
-    public function testAssertResponseIsNotFound(): void
+    public function testAssertResponseError(): void
     {
         $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
 
         $testCase
             ->setResponse(new Response('', 404))
-            ->assertResponseIsNotFound();
+            ->assertResponseError();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is not found.');
         $testCase
             ->setResponse(new Response('', 200))
-            ->assertResponseIsNotFound();
+            ->assertResponseError();
     }
 
     /**
-     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseIsServerError()
+     * @link \SimpleVC\TestCase\ResponseAssertionsTrait::assertResponseFailure()
      */
     #[Test]
-    public function testAssertResponseIsServerError(): void
+    public function testAssertResponseFailure(): void
     {
         $testCase = new TestCaseWithResponseAssertionsTrait('myTest');
 
         $testCase
             ->setResponse(new Response('', 500))
-            ->assertResponseIsServerError();
+            ->assertResponseFailure();
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Failed asserting that response is a server error.');
         $testCase
             ->setResponse(new Response('', 200))
-            ->assertResponseIsServerError();
+            ->assertResponseFailure();
     }
 
     /**

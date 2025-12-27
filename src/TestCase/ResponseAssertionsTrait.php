@@ -32,7 +32,7 @@ trait ResponseAssertionsTrait
      * @return void
      * @throws \PHPUnit\Framework\AssertionFailedError If the response is null
      */
-    protected function assertResponseExists(): void
+    public function assertResponseExists(): void
     {
         $this->assertNotNull($this->response, '`$this->response` property has not been set.');
     }
@@ -47,7 +47,7 @@ trait ResponseAssertionsTrait
      * @param string|null $message Optional custom message for the assertion
      * @return void
      */
-    protected function assertResponseStatusCode(int $expected, ?string $message = null): void
+    public function assertResponseStatusCode(int $expected, ?string $message = null): void
     {
         $this->assertResponseExists();
         $this->assertSame(
@@ -62,7 +62,7 @@ trait ResponseAssertionsTrait
      *
      * @return void
      */
-    protected function assertResponseIsSuccessful(): void
+    public function assertResponseIsSuccessful(): void
     {
         $this->assertResponseExists();
         $this->assertTrue($this->response->isSuccessful(), 'Failed asserting that response is successful.');
@@ -73,7 +73,7 @@ trait ResponseAssertionsTrait
      *
      * @return void
      */
-    protected function assertResponseIsNotFound(): void
+    public function assertResponseError(): void
     {
         $this->assertResponseStatusCode(404, 'Failed asserting that response is not found.');
     }
@@ -83,7 +83,7 @@ trait ResponseAssertionsTrait
      *
      * @return void
      */
-    protected function assertResponseIsServerError(): void
+    public function assertResponseFailure(): void
     {
         $this->assertResponseStatusCode(500, 'Failed asserting that response is a server error.');
     }
@@ -97,7 +97,7 @@ trait ResponseAssertionsTrait
      * @param string|null $expectedUrl The expected URL to which the response should redirect, or null to skip this check
      * @return void
      */
-    protected function assertResponseIsRedirect(?string $expectedUrl = null): void
+    public function assertResponseIsRedirect(?string $expectedUrl = null): void
     {
         $this->assertResponseExists();
         $this->assertTrue($this->response->isRedirect(), 'Failed asserting that response is a redirect.');
@@ -114,7 +114,7 @@ trait ResponseAssertionsTrait
      *
      * @return void
      */
-    protected function assertResponseIsEmpty(): void
+    public function assertResponseIsEmpty(): void
     {
         $this->assertResponseExists();
         $this->assertEmpty($this->response->getContent(), 'Failed asserting that response is empty.');
@@ -129,7 +129,7 @@ trait ResponseAssertionsTrait
      * @param string|null $message Custom failure message for the assertion
      * @return void
      */
-    protected function assertResponseIsNotEmpty(?string $message = null): void
+    public function assertResponseIsNotEmpty(?string $message = null): void
     {
         $this->assertResponseExists();
         $this->assertNotEmpty(
@@ -146,7 +146,7 @@ trait ResponseAssertionsTrait
      * @param string $needle The string to search for in the response content
      * @return void
      */
-    protected function assertResponseContains(string $needle): void
+    public function assertResponseContains(string $needle): void
     {
         $this->assertResponseExists();
         $this->assertResponseIsNotEmpty("Failed asserting that response contains \"{$needle}\", because the response is empty.");
@@ -165,7 +165,7 @@ trait ResponseAssertionsTrait
      * @param string $needle The string that should not appear in the response content
      * @return void
      */
-    protected function assertResponseNotContains(string $needle): void
+    public function assertResponseNotContains(string $needle): void
     {
         $this->assertResponseExists();
         $this->assertResponseIsNotEmpty("Failed asserting that response does not contain \"{$needle}\", because the response is empty.");
@@ -185,7 +185,7 @@ trait ResponseAssertionsTrait
      * @param string $pattern The regular expression pattern to match
      * @return void
      */
-    protected function assertResponseMatchesRegex(string $pattern): void
+    public function assertResponseMatchesRegex(string $pattern): void
     {
         $this->assertResponseExists();
         $this->assertMatchesRegularExpression(
@@ -202,7 +202,7 @@ trait ResponseAssertionsTrait
      * @param string $expected The expected header value
      * @return void
      */
-    protected function assertResponseHeader(string $header, string $expected): void
+    public function assertResponseHeader(string $header, string $expected): void
     {
         $this->assertResponseExists();
         $this->assertSame($expected, $this->response->headers->get($header), 'Failed asserting that response header "'.$header.'" has value "'.$expected.'".');

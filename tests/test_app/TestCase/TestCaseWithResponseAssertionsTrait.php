@@ -14,20 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TestCaseWithResponseAssertionsTrait extends TestCase
 {
-    use ResponseAssertionsTrait {
-        assertResponseExists as public;
-        assertResponseStatusCode as public;
-        assertResponseIsSuccessful as public;
-        assertResponseIsNotFound as public;
-        assertResponseIsServerError as public;
-        assertResponseIsRedirect as public;
-        assertResponseIsEmpty as public;
-        assertResponseIsNotEmpty as public;
-        assertResponseContains as public;
-        assertResponseNotContains as public;
-        assertResponseMatchesRegex as public;
-        assertResponseHeader as public;
-    }
+    use ResponseAssertionsTrait;
 
     public function setResponse(?Response $response): self
     {
