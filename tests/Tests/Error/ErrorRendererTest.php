@@ -27,7 +27,7 @@ class ErrorRendererTest extends TestCase
         $exception = new RuntimeException('Test error message');
 
         $errorRenderer = new class extends ErrorRenderer {
-            public function parseMessage(int $statusCode, ?Throwable $exception): string
+            public function parseMessage(int $statusCode, Throwable $exception): string
             {
                 return parent::parseMessage($statusCode, $exception);
             }
