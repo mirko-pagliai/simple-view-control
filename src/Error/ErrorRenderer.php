@@ -49,16 +49,15 @@ class ErrorRenderer
      *  issues by writing directly to `STDERR`.
      *
      * @param int $statusCode The HTTP status code that triggered the error
-     * @param \Throwable|null $exception The exception to log, or null if no exception is available
+     * @param \Throwable $exception The exception that triggered the error
      * @return void
+     *
+     * @internal
      */
-    protected function writeToConsole(int $statusCode, ?Throwable $exception): void
+    protected function writeToConsole(int $statusCode, Throwable $exception): void
     {
         // @phpstan-ignore booleanNot.alwaysFalse
         if (!DEBUG) {
-            return;
-        }
-        if ($exception === null) {
             return;
         }
 
@@ -81,15 +80,13 @@ class ErrorRenderer
      * 2. Logging the stack trace of the exception (if provided)
      *
      * @param int $statusCode The HTTP status code associated with the error (e.g., 500, 404)
-     * @param \Throwable|null $exception The exception that triggered the error or `null` if none
+     * @param \Throwable $exception The exception that triggered the error
      * @return void
+     *
+     * @internal
      */
-    protected function writeToLog(int $statusCode, ?Throwable $exception): void
+    protected function writeToLog(int $statusCode, Throwable $exception): void
     {
-        if ($exception === null) {
-            return;
-        }
-
         error_log($this->parseMessage($statusCode, $exception));
         error_log($exception->getTraceAsString());
     }
@@ -110,8 +107,10 @@ class ErrorRenderer
      */
     public function render(int $statusCode, ?Throwable $exception = null): Response
     {
-        $this->writeToLog($statusCode, $exception);
-        $this->writeToConsole($statusCode, $exception);
+        if ($exception) {
+            $this->writeToLog($statusCode, $exception);
+            $this->writeToConsole($statusCode, $exception);
+        }
 
         $view = new ErrorView();
         $content = $view->renderError($statusCode, $exception);

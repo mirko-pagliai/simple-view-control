@@ -47,9 +47,8 @@ class ErrorRendererTest extends TestCase
 
         foreach (['writeToConsole', 'writeToLog'] as $expectedMethod) {
             $errorRenderer
-                ->expects($this->once())
-                ->method($expectedMethod)
-                ->with(404, null);
+                ->expects($this->never())
+                ->method($expectedMethod);
         }
 
         $this->_response = $errorRenderer->render(404);
@@ -68,9 +67,8 @@ class ErrorRendererTest extends TestCase
 
         foreach (['writeToConsole', 'writeToLog'] as $expectedMethod) {
             $errorRenderer
-                ->expects($this->once())
-                ->method($expectedMethod)
-                ->with(500, null);
+                ->expects($this->never())
+                ->method($expectedMethod);
         }
 
         $this->_response = $errorRenderer->render(500);
