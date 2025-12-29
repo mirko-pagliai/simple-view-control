@@ -149,6 +149,7 @@ class ApplicationTest extends TestCase
     /**
      * @link \SimpleVC\Application::run()
      */
+    #[Test]
     public function testReturns500WhenControllerDoesNotExtendBaseController(): void
     {
         putenv('DEBUG=true');
