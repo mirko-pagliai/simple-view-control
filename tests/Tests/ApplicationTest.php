@@ -86,6 +86,7 @@ class ApplicationTest extends TestCase
 
         $this->_response = $app->run(Request::create('/does-not-exist'));
         $this->assertResponseError();
+        $this->assertResponseContains('Error response: error 404');
     }
 
     /**
@@ -98,5 +99,6 @@ class ApplicationTest extends TestCase
 
         $this->_response = $app->run(Request::create('/boom'));
         $this->assertResponseFailure();
+        $this->assertResponseContains('Error response: fatal 500');
     }
 }
