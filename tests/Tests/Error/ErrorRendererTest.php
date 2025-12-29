@@ -32,7 +32,7 @@ class ErrorRendererTest extends TestCase
     #[Test]
     public function testConstructWithCustomLogger(): void
     {
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createStub(LoggerInterface::class);
 
         $errorRenderer = new class ($logger) extends ErrorRenderer {
             public ?LoggerInterface $logger;
