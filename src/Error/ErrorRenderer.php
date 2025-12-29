@@ -6,6 +6,7 @@ namespace SimpleVC\Error;
 use SimpleVC\View\ErrorView;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use function SimpleVC\env;
 
 /**
  * Handles the rendering of error pages for HTTP exceptions and errors.
@@ -56,8 +57,7 @@ class ErrorRenderer
      */
     protected function writeToConsole(int $statusCode, Throwable $exception): void
     {
-        // @phpstan-ignore booleanNot.alwaysFalse
-        if (!DEBUG) {
+        if (!env('DEBUG', false)) {
             return;
         }
 

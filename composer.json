@@ -29,7 +29,10 @@
   "autoload": {
     "psr-4": {
       "SimpleVC\\": "src/"
-    }
+    },
+    "files": [
+      "src/global_functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

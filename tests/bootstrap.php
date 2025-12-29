@@ -11,7 +11,6 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(__DIR__));
 }
 
-const DEBUG = true;
 const TEST_APP = ROOT . DS . 'tests' . DS . 'test_app';
 const CONFIG = TEST_APP . DS . 'config';
 const TEMPLATES = TEST_APP . DS . 'templates';
@@ -27,7 +26,3 @@ $composerAutoload = ROOT . '/vendor/autoload.php';
 if (file_exists($composerAutoload)) {
     require_once $composerAutoload;
 }
-
-// Set error reporting for tests
-error_reporting(E_ALL);
-ini_set('display_errors', '1');

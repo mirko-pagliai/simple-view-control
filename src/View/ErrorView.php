@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SimpleVC\View;
 
 use Throwable;
+use function SimpleVC\env;
 
 /**
  * Specialized View class for rendering error pages.
@@ -60,8 +61,7 @@ class ErrorView extends View
 
         $data = ['statusCode' => $statusCode];
 
-        // @phpstan-ignore booleanAnd.leftAlwaysTrue
-        if (DEBUG && $exception !== null) {
+        if (env('DEBUG', false) === true && $exception !== null) {
             $data['exception'] = $exception;
         }
 

@@ -55,10 +55,23 @@ class ErrorViewTest extends TestCase
     #[Test]
     #[TestWith(['Error response: error 404', 404])]
     #[TestWith(['Error response: fatal 500', 500])]
-    #[TestWith(['Error response: error 404 - Something were wrong...', 404, new ResourceNotFoundException('Something were wrong...')])]
-    #[TestWith(['Error response: fatal 500 - Runtime!', 500, new RuntimeException('Runtime!')])]
+    #[TestWith(['Error response: error 404', 404, new ResourceNotFoundException('Something were wrong...')])]
+    #[TestWith(['Error response: fatal 500', 500, new RuntimeException('Runtime!')])]
     public function testRenderError(string $expected, int $statusCode, ?Throwable $exception = null): void
     {
+        $errorView = new ErrorView();
+        $result = $errorView->renderError($statusCode, $exception);
+        $this->assertSame($expected, $result);
+    }
+
+    #[Test]
+    #[TestWith(['Error response: error 404', 404])]
+    #[TestWith(['Error response: fatal 500', 500])]
+    #[TestWith(['Error response: error 404 - Something were wrong...', 404, new ResourceNotFoundException('Something were wrong...')])]
+    #[TestWith(['Error response: fatal 500 - Runtime!', 500, new RuntimeException('Runtime!')])]
+    public function testRenderErrorWithDebugEnabled(string $expected, int $statusCode, ?Throwable $exception = null): void
+    {
+        putenv('DEBUG=true');
         $errorView = new ErrorView();
         $result = $errorView->renderError($statusCode, $exception);
         $this->assertSame($expected, $result);
