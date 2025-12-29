@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6f92b9cac07a843fafc8a62e330def7",
+    "content-hash": "9a97f82e47dcf4d05c96a70718dbeb3b",
     "packages": [
         {
             "name": "josegonzalez/dotenv",
