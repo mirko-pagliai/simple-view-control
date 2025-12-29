@@ -6,7 +6,9 @@ namespace SimpleVC\Test\Tests;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SimpleVC\Application;
+use SimpleVC\Error\ErrorRenderer;
 use SimpleVC\TestCase\ResponseAssertionsTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
@@ -15,6 +17,14 @@ use Symfony\Component\Routing\RouteCollection;
 class ApplicationTest extends TestCase
 {
     use ResponseAssertionsTrait;
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        putenv('DEBUG');
+    }
 
     /**
      * @link \SimpleVC\Application::__construct()
@@ -93,6 +103,22 @@ class ApplicationTest extends TestCase
      * @link \SimpleVC\Application::run()
      */
     #[Test]
+    public function testReturns404WhenRouteIsNotFoundWithDebugEnabled(): void
+    {
+        putenv('DEBUG=true');
+
+        $errorRenderer = new ErrorRenderer(new NullLogger());
+
+        $app = new Application(null, $errorRenderer);
+        $this->_response = $app->run(Request::create('/does-not-exist'));
+        $this->assertResponseError();
+        $this->assertResponseContains('No routes found for "/does-not-exist".');
+    }
+
+    /**
+     * @link \SimpleVC\Application::run()
+     */
+    #[Test]
     public function testReturns500WhenUnhandledExceptionOccurs(): void
     {
         $app = new Application();
@@ -100,5 +126,21 @@ class ApplicationTest extends TestCase
         $this->_response = $app->run(Request::create('/boom'));
         $this->assertResponseFailure();
         $this->assertResponseContains('Error response: fatal 500');
+    }
+
+    /**
+     * @link \SimpleVC\Application::run()
+     */
+    #[Test]
+    public function testReturns500WhenUnhandledExceptionOccursWithDebugEnabled(): void
+    {
+        putenv('DEBUG=true');
+
+        $errorRenderer = new ErrorRenderer(new NullLogger());
+
+        $app = new Application(null, $errorRenderer);
+
+        $this->_response = $app->run(Request::create('/boom'));
+        $this->assertResponseContains('Error response: fatal 500 - Boom');
     }
 }
