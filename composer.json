@@ -2,7 +2,7 @@
   "name": "mirko-pagliai/simple-view-control",
   "description": "A lightweight PHP framework focused on View and Controller layers",
   "license": "MIT",
-  "type": "project",
+  "type": "library",
   "authors": [
     {
       "name": "Mirko Pagliai",
