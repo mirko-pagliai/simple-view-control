@@ -1,4 +1,6 @@
 # simple-view-control
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![CI](https://github.com/mirko-pagliai/simple-view-control/actions/workflows/ci.yml/badge.svg)](https://github.com/mirko-pagliai/simple-view-control/actions/workflows/ci.yml)
 
 A lightweight PHP framework focused on View and Controller layers - the "VC" without the "M". 
 
@@ -15,12 +17,3 @@ It provides clean, minimal implementation for handling HTTP requests, routing, a
 - **Route parameter support** with automatic placeholder substitution
 - **PSR-4 autoloading** compatible
 - **Zero configuration** for basic usage
-
-## Requirements
-
-- PHP 8.4 or higher
-- Composer
-
-## Perfect For
-
-Small to medium projects that need solid View-Controller patterns without ORM overhead, or as a learning tool to understand MVC architecture without framework magic.
