@@ -1,6 +1,8 @@
 # simple-view-controller
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 [![CI](https://github.com/mirko-pagliai/simple-view-controller/actions/workflows/ci.yml/badge.svg)](https://github.com/mirko-pagliai/simple-view-controller/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/mirko-pagliai/simple-view-controller/graph/badge.svg?token=0mNM4qL98u)](https://codecov.io/gh/mirko-pagliai/simple-view-controller)
+[![CodeFactor](https://www.codefactor.io/repository/github/mirko-pagliai/simple-view-controller/badge)](https://www.codefactor.io/repository/github/mirko-pagliai/simple-view-controller)
 
 A lightweight PHP framework focused on View and Controller layers - the "VC" without the "M". 
 
