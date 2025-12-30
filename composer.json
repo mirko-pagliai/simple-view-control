@@ -1,5 +1,5 @@
 {
-  "name": "mirko-pagliai/simple-view-control",
+  "name": "mirko-pagliai/simple-view-controller",
   "description": "A lightweight PHP framework focused on View and Controller layers",
   "license": "MIT",
   "type": "library",

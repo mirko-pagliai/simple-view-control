@@ -16,7 +16,7 @@ const CONFIG = TEST_APP . DS . 'config';
 const TEMPLATES = TEST_APP . DS . 'templates';
 
 // Define temporary directory
-define('TMP', sys_get_temp_dir() . DS . 'simple-view-control');
+define('TMP', sys_get_temp_dir() . DS . 'simple-view-controller');
 if (!file_exists(TMP)) {
     mkdir(TMP, 0777, true);
 }

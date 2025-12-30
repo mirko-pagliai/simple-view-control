@@ -8,7 +8,7 @@
 >
 
     <testsuites>
-        <testsuite name="simple-view-control Test Suite">
+        <testsuite name="simple-view-controller Test Suite">
             <directory>tests/Tests</directory>
         </testsuite>
     </testsuites>
