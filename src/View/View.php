@@ -19,6 +19,7 @@ namespace SimpleVC\View;
 
 use InvalidArgumentException;
 use RuntimeException;
+use SimpleVC\Exception\TemplateFileNotFound;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -134,20 +135,24 @@ class View
     }
 
     /**
-     * Renders a template file with the given data.
+     * Renders a template file with the provided data and returns the resulting output as a string.
      *
-     * @param string $file The name of the template file to render.
-     * @param array<string, mixed> $data An associative array of data to be used within the template.
-     * @return string The rendered output of the template.
+     * This method locates the specified template file within the template path, validates its existence,
+     * and processes the file using the provided data. If the file is not found or an error occurs during
+     * rendering, an exception is thrown.
      *
-     * @throws \InvalidArgumentException If the specified template file does not exist.
-     * @throws \RuntimeException If the template file returns invalid output, that is not a string.
+     * @param string $file The name of the template file to render. It is relative to the template path.
+     * @param array<string, mixed> $data An associative array of data to be passed to the template.
+     * @return string The rendered output of the template file.
+     *
+     * @throws \SimpleVC\Exception\TemplateFileNotFound If the specified template file does not exist.
+     * @throws \RuntimeException If the template file returns invalid output.
      */
     protected function renderFile(string $file, array $data): string
     {
         $filePath = $this->templatePath . '/' . $file;
         if (!file_exists($filePath)) {
-            throw new InvalidArgumentException("Template file `{$filePath}` not found.");
+            throw new TemplateFileNotFound("Template file `{$filePath}` not found.");
         }
 
         $result = $this->includeTemplateFile($filePath, $data);

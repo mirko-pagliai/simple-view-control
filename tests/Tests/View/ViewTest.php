@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
+use SimpleVC\Exception\TemplateFileNotFound;
 use SimpleVC\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -158,6 +159,7 @@ class ViewTest extends TestCase
             }
         };
 
+        $this->expectException(TemplateFileNotFound::class);
         $this->expectExceptionMessage('Template file `' . TEMPLATES . '/noExistingFile.php` not found.');
         $view->renderFile('noExistingFile.php', []);
     }
